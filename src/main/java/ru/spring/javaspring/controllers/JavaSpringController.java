@@ -21,7 +21,7 @@ public class JavaSpringController {
     @GetMapping("/calculator")
     public String Calc(Model model) {
         model.addAttribute("title", "Calculator");
-        return "Calculator";
+        return "Home";
     }
 
     @PostMapping("/result")
@@ -53,7 +53,6 @@ public class JavaSpringController {
 
         model.addAttribute("title", "Result page");
         model.addAttribute("answer", c);
-
         return "ResultPage";
     }
 }
