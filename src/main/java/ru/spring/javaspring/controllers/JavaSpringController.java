@@ -14,36 +14,25 @@ public class JavaSpringController {
 
     @GetMapping("/")
     public String greeting(Model model) {
-        Integer a = 0;
-        a = 1;
-        model.addAttribute("title", a);
-        return "home";
+        model.addAttribute("title", "Home page");
+        return "Home";
     }
 
-    @GetMapping("/calc")
+    @GetMapping("/calculator")
     public String Calc(Model model) {
-        model.addAttribute("title", 167);
-        return "home";
+        model.addAttribute("title", "Calculator");
+        return "Calculator";
     }
 
-    @GetMapping("/res")
-    public String Res(@RequestParam(value = "number1", required = false, defaultValue = "1") int a,
-                      @RequestParam(value = "number2", required = false, defaultValue = "2") int b,
-                      Model model) {
-        int c = a+b;
-        model.addAttribute("answer", c);
-        return "result";
-    }
-
-    @PostMapping("/res")
+    @PostMapping("/result")
     public String Result(@RequestParam(value = "number1", required = false, defaultValue = "1") int a,
-                      @RequestParam(value = "number2", required = false, defaultValue = "2") int b,
-                      @RequestParam(value = "action", required = false) String act,
-                      Model model) {
+                         @RequestParam(value = "number2", required = false, defaultValue = "2") int b,
+                         @RequestParam(value = "action", required = false) String action,
+                         Model model) {
 
         int c = 0;
 
-        switch (act) {
+        switch (action) {
             case "+" -> {
                 c = a + b;
                 break;
@@ -61,7 +50,10 @@ public class JavaSpringController {
                 break;
             }
         }
+
+        model.addAttribute("title", "Result page");
         model.addAttribute("answer", c);
-        return "result";
+
+        return "ResultPage";
     }
 }
