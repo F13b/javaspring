@@ -19,7 +19,7 @@ public class JavaSpringController {
     @GetMapping("/calculator")
     public String Calc(Model model) {
         model.addAttribute("title", "Calculator");
-        return "Home";
+        return "Calculator";
     }
 
     @PostMapping("/result")
