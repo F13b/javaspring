@@ -8,30 +8,30 @@
   <title th:text="${title}"></title>
 </head>
 <body>
-<div class="container">
-  <form action="add" method="post">
+<div class="container" th:each="el : ${news}">
+  <form th:action="'/news/edit/' + ${el.id}" method="post">
     <div class="mb-3">
       <label for="title">title</label>
-      <input type="text" id="title" name="title" class="form-control" placeholder="Enter the title">
+      <input type="text" id="title" name="title" class="form-control" placeholder="Enter the title" th:value="${el.title}">
     </div>
     <div class="mb-3">
       <label for="text">text</label>
-      <textarea id="text" name="text" class="form-control" placeholder="Enter the text" rows="10"></textarea>
+      <textarea id="text" name="text" class="form-control" placeholder="Enter the text" rows="10" th:text="${el.text}"></textarea>
     </div>
     <div class="mb-3">
       <label for="author">author</label>
-      <input type="text" id="author" name="author" class="form-control" placeholder="Enter the author">
+      <input type="text" id="author" name="author" class="form-control" placeholder="Enter the author" th:value="${el.author}">
     </div>
     <div class="mb-3">
       <label for="views">views</label>
-      <input type="number" id="views" name="views" class="form-control" placeholder="Enter the views">
+      <input type="number" id="views" name="views" class="form-control" placeholder="Enter the views" th:value="${el.views}">
     </div>
     <div class="mb-3">
       <label for="likes">likes</label>
-      <input type="number" id="likes" name="likes" class="form-control" placeholder="Enter the likes">
+      <input type="number" id="likes" name="likes" class="form-control" placeholder="Enter the likes" th:value="${el.likes}">
     </div>
     <div class="d-flex">
-      <button type="submit" class="btn btn-outline-success me-2">Create!</button>
+      <button type="submit" class="btn btn-outline-success me-2">Edit!</button>
       <a href="/news/" class="btn btn-outline-danger">Go back!</a>
     </div>
   </form>
