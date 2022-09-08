@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
 
 @Entity
 public class Vegetables {
@@ -15,7 +16,25 @@ public class Vegetables {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    String name, color, sun, fertilizer;
+    @NotEmpty(message = "Пожалуйста, ведите свое имя!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    String name;
+
+    @NotEmpty(message = "Пожалуйста, ведите свой цвет!")
+    @Size(message = "Введите не менее 2 символов!", min=1, max=1000000)
+    String color;
+
+    @NotEmpty(message = "Пожалуйста, введите, нужно ли вам солнце!")
+    @Size(message = "Введите не менее 2 символов!", min=1, max=3)
+    String sun;
+
+    @NotEmpty(message = "Пожалуйста, введите, нужны ли вам удобрения!")
+    @Size(message = "Введите не менее 2 символов!", min=1, max=3)
+    String fertilizer;
+
+    @Min(message = "Тут вселенная схлопнулась!", value=-273)
+    @Max(message = "Фига вы огнеупорный", value=273)
+    @NotNull(message = "Введите свою комфортную температуру воды!")
     Integer waterTemperature;
 
     public Vegetables(String name, String color, String sun, String fertilizer, Integer waterTemperature) {

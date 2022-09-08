@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <!--  Bootstrap css link  -->
@@ -7,35 +6,41 @@
 
     <title th:text="${pageTitle}"></title>
 </head>
+<html lang="en">
 <body>
 
 
 
 <div class="container">
-    <form action="add" method="post">
+    <form th:object="${users}" action="add" method="post">
         <div class="mb-3">
             <label for="name">Your name</label>
             <input type="text" id="name" name="name" class="form-control" placeholder="Enter the your name">
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
         </div>
         <div class="mb-3">
             <label for="nickname">Your name</label>
             <input id="nickname" name="nickname" class="form-control" placeholder="Enter the your nickname">
+            <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Error</div>
         </div>
         <div class="mb-3">
             <label for="email">Your email</label>
             <input type="email" id="email" name="email" class="form-control" placeholder="Enter the your email">
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
         </div>
         <div class="mb-3">
             <label for="age">Your age</label>
-            <input type="number" id="age" name="age" class="form-control" placeholder="Enter the your age">
+            <input type="number"  id="age" name="age" class="form-control" placeholder="Enter the your age">
+            <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error</div>
         </div>
         <div class="mb-3">
             <label for="gender">Choose your gender</label>
-            <select class="form-select" id="gender" name="gender" aria-label="Default select example">
+            <select class="form-select"  id="gender" name="gender" aria-label="Default select example">
                 <option value="male">Male</option>
                 <option value="woman">Woma</option>
                 <option value="attack helicopter">attack helicopter</option>
             </select>
+            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Error</div>
         </div>
         <button type="submit" class="btn btn-outline-primary mb-3">Sign up</button>
     </form>

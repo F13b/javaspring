@@ -11,23 +11,27 @@
 
 
 
-<div class="container" th:each="el : ${users}">
-    <form th:action="'/user/edit/' + ${el.id}" method="post">
+<div class="container" th:each="el : ${usersE}">
+    <form th:object="${users}" th:action="'/user/edit/' + ${el.id}" method="post">
         <div class="mb-3">
             <label for="name">Your name</label>
             <input type="text" id="name" name="name" class="form-control" placeholder="Enter the your name" th:value="${el.name}">
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
         </div>
         <div class="mb-3">
             <label for="nickname">Your name</label>
             <input id="nickname" name="nickname" class="form-control" placeholder="Enter the your nickname" th:value="${el.nickname}">
+            <div th:if="${#fields.hasErrors('nickname')}" th:errors="*{nickname}">Error</div>
         </div>
         <div class="mb-3">
             <label for="email">Your email</label>
             <input type="email" id="email" name="email" class="form-control" placeholder="Enter the your email" th:value="${el.email}">
+            <div th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Error</div>
         </div>
         <div class="mb-3">
             <label for="age">Your age</label>
             <input type="number" id="age" name="age" class="form-control" placeholder="Enter the your age" th:value="${el.age}">
+            <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error</div>
         </div>
         <div class="mb-3">
             <label for="gender">Choose your gender</label>
@@ -36,6 +40,7 @@
                 <option value="woman">Woma</option>
                 <option value="attack helicopter">attack helicopter</option>
             </select>
+            <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}">Error</div>
         </div>
         <button type="submit" class="btn btn-outline-primary mb-3">Edit</button>
     </form>

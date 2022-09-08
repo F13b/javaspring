@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.*;
+import java.util.Optional;
 
 @Entity
 public class User  {
@@ -13,7 +15,25 @@ public class User  {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    String name, nickname, email, gender;
+    @NotEmpty(message = "Пожалуйста, ведите свое имя!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    String name;
+
+    @NotEmpty(message = "Пожалуйста, ведите свой никнейм!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    String nickname;
+
+    @NotEmpty(message = "Пожалуйста, ведите свой почтовый адрес!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    String email;
+
+    @NotEmpty(message = "Пожалуйста, выберите свой пол!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    String gender;
+
+    @Min(message = "Вы еще не родились!", value=0)
+    @Max(message = "Люди столько не живут! Черная магия! Колдун дурацкий!", value=110)
+    @NotNull(message = "Введите свой возраст!")
     Integer age;
 
     public User(String name, String nickname, String email, String gender, Integer age) {

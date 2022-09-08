@@ -12,14 +12,16 @@
 
 
 <div class="container">
-    <form action="add" method="post">
+    <form th:object="${vegetables}" action="add" method="post">
         <div class="mb-3">
             <label for="name">Your name</label>
             <input type="text" id="name" name="name" class="form-control" placeholder="Enter the your name">
+            <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Error</div>
         </div>
         <div class="mb-3">
             <label for="color">Your color</label>
             <input type="text" id="color" name="color" class="form-control" placeholder="Enter the your color">
+            <div th:if="${#fields.hasErrors('color')}" th:errors="*{color}">Error</div>
         </div>
         <div class="mb-3">
             <label for="sun">Your need sun?</label>
@@ -27,10 +29,12 @@
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
             </select>
+            <div th:if="${#fields.hasErrors('sun')}" th:errors="*{sun}">Error</div>
         </div>
         <div class="mb-3">
             <label for="waterTemperature">Your waterTemperature</label>
             <input type="number" id="waterTemperature" name="waterTemperature" class="form-control" placeholder="Enter the your waterTemperature">
+            <div th:if="${#fields.hasErrors('waterTemperature')}" th:errors="*{waterTemperature}">Error</div>
         </div>
         <div class="mb-3">
             <label for="fertilizer">You need fertilizer?</label>
@@ -38,6 +42,7 @@
                 <option value="yes">Yes</option>
                 <option value="no">No</option>
             </select>
+            <div th:if="${#fields.hasErrors('fertilizer')}" th:errors="*{fertilizer}">Error</div>
         </div>
         <button type="submit" class="btn btn-outline-primary mb-3">Add</button>
     </form>
