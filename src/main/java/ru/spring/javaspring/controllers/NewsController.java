@@ -21,15 +21,14 @@ public class NewsController {
 //    Get mappings
     @GetMapping("/")
     public String index(Model model) {
-
         Iterable<News> news = newsRepository.findAll();
         model.addAttribute("news", news);
-        return "news/News";
+        return "news/all_news";
     }
 
     @GetMapping("/add")
     public String addView(Model model) {
-        return "news/Add";
+        return "news/add_news";
     }
 
     @GetMapping("/{id}")
@@ -38,18 +37,11 @@ public class NewsController {
         ArrayList<News> arrayList = new ArrayList<>();
         news.ifPresent(arrayList::add);
         model.addAttribute("news", arrayList);
-        return "news/Detail";
+        return "news/separate_news";
     }
 
-    @GetMapping("/delete/{id}")
-    public String delete (@PathVariable("id") Long id, Model model) {
-        newsRepository.deleteById(id);
-        return "redirect:/news/";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String edit (@PathVariable("id") Long id,
-                        Model model) {
+    @GetMapping("/{id}/edit")
+    public String edit (@PathVariable("id") Long id, Model model) {
         if (!newsRepository.existsById(id)) {
             return "redirect:/news/";
         }
@@ -57,32 +49,30 @@ public class NewsController {
         ArrayList<News> arrayList = new ArrayList<>();
         news.ifPresent(arrayList::add);
         model.addAttribute("news", arrayList);
-        return "news/Edit";
+        return "news/edit_news";
     }
 
 //    Post mappings
     @PostMapping("/add")
     public String add(@RequestParam("title") String title,
-                      @RequestParam("text") String text,
                       @RequestParam("author") String author,
-                      @RequestParam("views") Integer views,
+                      @RequestParam("text") String text,
                       @RequestParam("likes") Integer likes,
+                      @RequestParam("views") Integer views,
                       Model model) {
-
         News newsOne = new News(title, text, author, views, likes);
         newsRepository.save(newsOne);
         return "redirect:/news/";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/{id}/edit")
     public String edit (@PathVariable("id") Long id,
                         @RequestParam("title") String title,
                         @RequestParam("text") String text,
                         @RequestParam("author") String author,
-                        @RequestParam("views") Integer views,
                         @RequestParam("likes") Integer likes,
+                        @RequestParam("views") Integer views,
                         Model model) {
-
         News news = newsRepository.findById(id).orElseThrow();
 
         news.setTitle(title);
@@ -95,12 +85,17 @@ public class NewsController {
         return "redirect:/news/";
     }
 
+    @PostMapping("/{id}/delete")
+    public String delete (@PathVariable("id") Long id, Model model) {
+        newsRepository.deleteById(id);
+        return "redirect:/news/";
+    }
+
 //    Search get mappings
     @GetMapping("/search")
-    public String search(@RequestParam("title") String title,
-                      Model model) {
+    public String search(@RequestParam("title") String title, Model model) {
         List<News> newsList = newsRepository.findByTitleContains(title);
         model.addAttribute("news", newsList);
-        return "news/News";
+        return "news/all_news";
     }
 }
