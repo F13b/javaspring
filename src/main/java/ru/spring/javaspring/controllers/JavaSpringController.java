@@ -9,7 +9,6 @@ import ru.spring.javaspring.JavaspringApplication;
 
 @Controller
 public class JavaSpringController {
-
     @GetMapping("/")
     public String greeting(Model model) {
         model.addAttribute("title", "Home page");
