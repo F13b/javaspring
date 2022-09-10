@@ -9,8 +9,6 @@
 </head>
 <body>
 
-
-
 <div class="container" th:each="el : ${usersE}">
     <form th:object="${users}" th:action="'/user/edit/' + ${el.id}" method="post">
         <div class="mb-3">

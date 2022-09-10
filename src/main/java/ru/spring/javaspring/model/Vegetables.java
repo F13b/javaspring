@@ -21,15 +21,15 @@ public class Vegetables {
     String name;
 
     @NotEmpty(message = "Пожалуйста, ведите свой цвет!")
-    @Size(message = "Введите не менее 2 символов!", min=1, max=1000000)
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
     String color;
 
     @NotEmpty(message = "Пожалуйста, введите, нужно ли вам солнце!")
-    @Size(message = "Введите не менее 2 символов!", min=1, max=3)
+    @Size(message = "Введите не менее 2 символов!", min=2, max=3)
     String sun;
 
     @NotEmpty(message = "Пожалуйста, введите, нужны ли вам удобрения!")
-    @Size(message = "Введите не менее 2 символов!", min=1, max=3)
+    @Size(message = "Введите не менее 2 символов!", min=2, max=3)
     String fertilizer;
 
     @Min(message = "Тут вселенная схлопнулась!", value=-273)

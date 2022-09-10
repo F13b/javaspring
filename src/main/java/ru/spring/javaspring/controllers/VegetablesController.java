@@ -62,11 +62,11 @@ public class VegetablesController {
         if (!vegetablesRepository.existsById(id)) {
             return "redirect:/vegetables/all";
         }
-        Optional<Vegetables> user = vegetablesRepository.findById(id);
+        Optional<Vegetables> vegetables = vegetablesRepository.findById(id);
         ArrayList<Vegetables> arrayList = new ArrayList<>();
-        user.ifPresent(arrayList::add);
-        model.addAttribute("vegetables", arrayList);
-        model.addAttribute("vegetablesE", new Vegetables());
+        vegetables.ifPresent(arrayList::add);
+        model.addAttribute("vegetablesE", arrayList);
+        model.addAttribute("vegetables", new Vegetables());
         return "vegetables/Editvegetables";
     }
 
@@ -124,12 +124,16 @@ public class VegetablesController {
                         @RequestParam("sun") String sun,
                         @RequestParam("fertilizer") String fertilizer,
                         @RequestParam("waterTemperature") Integer waterTemperature,
-                        @ModelAttribute("user") @Valid User newUser,
+                        @ModelAttribute("vegetables") @Valid Vegetables newVegetable,
                         BindingResult bindingResult,
                         Model model) {
 
         if (bindingResult.hasErrors()) {
-            return "vegetables/AddVegetable";
+            Optional<Vegetables> vegetables = vegetablesRepository.findById(id);
+            ArrayList<Vegetables> arrayList = new ArrayList<>();
+            vegetables.ifPresent(arrayList::add);
+            model.addAttribute("vegetablesE", arrayList);
+            return "vegetables/EditVegetables";
         }
 
         Vegetables vegetables = vegetablesRepository.findById(id).orElseThrow();

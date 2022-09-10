@@ -67,6 +67,7 @@ public class UserController {
         user.ifPresent(arrayList::add);
         model.addAttribute("usersE", arrayList);
         model.addAttribute("users", new User());
+
         return "users/EditUser";
     }
 
@@ -122,6 +123,10 @@ public class UserController {
                        Model model) {
 
         if (bindingResult.hasErrors()) {
+            Optional<User> user = userRepository.findById(id);
+            ArrayList<User> arrayList = new ArrayList<>();
+            user.ifPresent(arrayList::add);
+            model.addAttribute("usersE", arrayList);
             return "users/EditUser";
         }
 
