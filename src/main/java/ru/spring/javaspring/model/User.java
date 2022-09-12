@@ -1,48 +1,49 @@
 package ru.spring.javaspring.model;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.util.Optional;
+import java.util.Set;
 
 @Entity
 public class User  {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    Long id;
-
-    @NotEmpty(message = "Пожалуйста, ведите свое имя!")
-    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
-    String name;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @NotEmpty(message = "Пожалуйста, ведите свой никнейм!")
     @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
-    String nickname;
+    private String username;
 
-    @NotEmpty(message = "Пожалуйста, ведите свой почтовый адрес!")
+    @NotEmpty(message = "Пожалуйста, ведите свое имя!")
     @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
-    String email;
+    private String name;
 
     @NotEmpty(message = "Пожалуйста, выберите свой пол!")
     @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
-    String gender;
+    private String gender;
+
+    @NotEmpty(message = "Пожалуйста, ведите свой почтовый адрес!")
+    @Size(message = "Введите не менее 2 символов!", min=2, max=1000000)
+    private String email;
+
+    @NotEmpty(message = "Пожалуйста, введите пароль!")
+    @Size(message = "Введите не менее 8 символов!", min=8, max=1000000)
+    private String password;
 
     @Min(message = "Вы еще не родились!", value=0)
     @Max(message = "Люди столько не живут! Черная магия! Колдун дурацкий!", value=110)
     @NotNull(message = "Введите свой возраст!")
-    Integer age;
+    private Integer age;
 
-    public User(String name, String nickname, String email, String gender, Integer age) {
-        this.name = name;
-        this.nickname = nickname;
-        this.email = email;
-        this.gender = gender;
-        this.age = age;
-    }
+    private boolean active;
+
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     public User() {
     }
@@ -55,28 +56,20 @@ public class User  {
         this.id = id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNickname() {
-        return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getGender() {
@@ -87,11 +80,43 @@ public class User  {
         this.gender = gender;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
     public Integer getAge() {
         return age;
     }
 
     public void setAge(Integer age) {
         this.age = age;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

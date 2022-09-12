@@ -85,7 +85,7 @@ public class VegetablesController {
 //    }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("vegetables") @Valid Vegetables newVegetable,
+    public String add(@Valid Vegetables newVegetable,
                       BindingResult bindingResult,
                       Model model) {
 
