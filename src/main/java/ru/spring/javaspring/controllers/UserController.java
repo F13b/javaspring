@@ -5,15 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.spring.javaspring.model.Role;
-import ru.spring.javaspring.model.User;
+import ru.spring.javaspring.model.*;
+import ru.spring.javaspring.repo.BirthRepository;
+import ru.spring.javaspring.repo.PhoneRepository;
+import ru.spring.javaspring.repo.TownRepository;
 import ru.spring.javaspring.repo.UserRepository;
 
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/users")
@@ -21,6 +20,12 @@ public class UserController {
 
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    BirthRepository birthRepository;
+    @Autowired
+    TownRepository townRepository;
+    @Autowired
+    PhoneRepository phoneRepository;
 
 //    Get mappings
     @GetMapping("/")
@@ -61,6 +66,10 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         ArrayList<User> arrayList = new ArrayList<>();
         user.ifPresent(arrayList::add);
+        Iterable<Town> towns = townRepository.findAll();
+        Iterable<Phone> phones = phoneRepository.findAll();
+        model.addAttribute("phone", phones);
+        model.addAttribute("towns", towns);
         model.addAttribute("usersE", arrayList);
         model.addAttribute("user", new User());
 
@@ -71,6 +80,9 @@ public class UserController {
     public String edit(@ModelAttribute("users") @Valid User newuser,
                        BindingResult bindingResult,
                        @PathVariable("id") Long id,
+                       @RequestParam(value = "town", required = false) String userTown,
+                       @RequestParam(value = "phone", required = false) String phones,
+                       @RequestParam(value = "birth", required = false) String birth,
                        Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -82,14 +94,22 @@ public class UserController {
         }
 
         User user = userRepository.findById(id).orElseThrow();
+        Birth date_of_birth = birthRepository.findByBirth(birth);
+        Town town = townRepository.findByTown(userTown);
+        Phone phone = phoneRepository.findByNumber(phones);
 
         user.setName(newuser.getName());
         user.setUsername(newuser.getUsername());
         user.setAge(newuser.getAge());
         user.setGender(newuser.getGender());
         user.setEmail(newuser.getEmail());
+        user.setDate_of_birth(date_of_birth);
+        user.setPhone(phone);
+        town.getUsers().add(user);
+        user.getTowns().add(town);
 
-        userRepository.save(newuser);
+        userRepository.save(user);
+        townRepository.save(town);
         return "redirect:/users/all";
     }
 

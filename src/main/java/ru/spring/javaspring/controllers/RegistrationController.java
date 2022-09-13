@@ -6,9 +6,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import ru.spring.javaspring.model.Role;
+import ru.spring.javaspring.model.Town;
 import ru.spring.javaspring.model.User;
 import ru.spring.javaspring.model.Vegetables;
+import ru.spring.javaspring.repo.TownRepository;
 import ru.spring.javaspring.repo.UserRepository;
 
 import javax.validation.Valid;
@@ -52,6 +55,7 @@ public class RegistrationController {
         user.setActive(true);
         user.setRoles(Collections.singleton(Role.USER));
         userRepository.save(user);
+//        townRepository.save(town);
         return "redirect:/login";
     }
 }

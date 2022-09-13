@@ -43,7 +43,23 @@
             <div th:if="${#fields.hasErrors('age')}" th:errors="*{age}">Error</div>
         </div>
         <div class="mb-3">
-            <button class="btn btn-outline-success" type="submit">Sign up!</button>
+            <label for="town">Choose town</label>
+            <select name="town" id="town" class="form-select" aria-label="Default select example">
+                <option th:each="elem : ${towns}" th:text="${elem.town}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="phone">Enter the place of study</label>
+            <select name="phone" id="phone" class="form-select">
+                <option th:each="ph : ${phone}" th:text="${ph.number}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="birth">Enter the place of study</label>
+            <input type="date" class="form-control" id="birth" name="birth" required th:value="${el.date_of_birth}">
+        </div>
+        <div class="mb-3">
+            <button class="btn btn-outline-success" type="submit">Edit profile</button>
             <a class="btn btn-outline-danger" href="/users/all">Back</a>
         </div>
     </form>

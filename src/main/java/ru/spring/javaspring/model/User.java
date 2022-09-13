@@ -3,12 +3,13 @@ package ru.spring.javaspring.model;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class User  {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -44,6 +45,19 @@ public class User  {
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
+
+    @ManyToMany
+    @JoinTable (name = "user_town",
+                joinColumns = @JoinColumn(name = "user_id"),
+                inverseJoinColumns = @JoinColumn(name = "town_id"))
+    private List<Town> towns;
+
+    @ManyToOne(optional = true, cascade = CascadeType.ALL)
+    private Birth date_of_birth;
+
+    @OneToOne(optional = true, cascade = CascadeType.ALL)
+    @JoinColumn(name = "phone_id")
+    private Phone phone;
 
     public User() {
     }
@@ -118,5 +132,29 @@ public class User  {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public List<Town> getTowns() {
+        return towns;
+    }
+
+    public void setTowns(List<Town> towns) {
+        this.towns = towns;
+    }
+
+    public Birth getDate_of_birth() {
+        return date_of_birth;
+    }
+
+    public void setDate_of_birth(Birth date_of_birth) {
+        this.date_of_birth = date_of_birth;
+    }
+
+    public Phone getPhone() {
+        return phone;
+    }
+
+    public void setPhone(Phone phone) {
+        this.phone = phone;
     }
 }

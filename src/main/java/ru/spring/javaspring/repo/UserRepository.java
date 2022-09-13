@@ -7,7 +7,7 @@ import ru.spring.javaspring.model.User;
 import java.util.List;
 
 public interface UserRepository extends CrudRepository<User, Long> {
-    public List<User> findByName(String name);
+    User findByName(String name);
     public List<User> findByNameContains(String name);
     public List<User> findByUsernameContains(String nickname);
 
