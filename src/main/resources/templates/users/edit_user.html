@@ -51,12 +51,14 @@
         <div class="mb-3">
             <label for="phone">Enter the place of study</label>
             <select name="phone" id="phone" class="form-select">
-                <option th:each="ph : ${phone}" th:text="${ph.number}"></option>
+                <option th:each="ph : ${phone}" th:text="${ph.number}" th:value="${ph.id}"></option>
             </select>
         </div>
         <div class="mb-3">
             <label for="birth">Enter the place of study</label>
-            <input type="date" class="form-control" id="birth" name="birth" required th:value="${el.date_of_birth}">
+            <select class="form-select" id="birth" name="birth" required>
+                <option th:each="qwe : ${birth}" th:text="${qwe.birth}"></option>
+            </select>
         </div>
         <div class="mb-3">
             <button class="btn btn-outline-success" type="submit">Edit profile</button>

@@ -68,6 +68,8 @@ public class UserController {
         user.ifPresent(arrayList::add);
         Iterable<Town> towns = townRepository.findAll();
         Iterable<Phone> phones = phoneRepository.findAll();
+        Iterable<Birth> brt = birthRepository.findAll();
+        model.addAttribute("birth", brt);
         model.addAttribute("phone", phones);
         model.addAttribute("towns", towns);
         model.addAttribute("usersE", arrayList);
@@ -81,7 +83,7 @@ public class UserController {
                        BindingResult bindingResult,
                        @PathVariable("id") Long id,
                        @RequestParam(value = "town", required = false) String userTown,
-                       @RequestParam(value = "phone", required = false) String phones,
+                       @RequestParam(value = "phone", required = false) Long phones,
                        @RequestParam(value = "birth", required = false) String birth,
                        Model model) {
 
@@ -96,7 +98,7 @@ public class UserController {
         User user = userRepository.findById(id).orElseThrow();
         Birth date_of_birth = birthRepository.findByBirth(birth);
         Town town = townRepository.findByTown(userTown);
-        Phone phone = phoneRepository.findByNumber(phones);
+        Phone phone = phoneRepository.findById(phones).orElseThrow();
 
         user.setName(newuser.getName());
         user.setUsername(newuser.getUsername());

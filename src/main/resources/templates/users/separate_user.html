@@ -11,13 +11,9 @@
 
 <div class="container">
     <div th:each="el : ${users}">
-        <h1 class="fs-4" th:text="'Name ' + ${el.name}"></h1>
-        <h6 class="fs-6" th:text="'Nickname ' + ${el.username}"></h6>
+        <h1 class="fs-4" th:text="'Username ' + ${el.username}"></h1>
 
-        <p class="fs-5" th:text="'Email ' + ${el.email}"></p>
-
-        <p class="card-subtitle text-muted fs-6" th:text="'Age: ' + ${el.age}"></p>
-        <p class="card-subtitle text-muted fs-6" th:text="'Gender ' + ${el.gender}"></p>
+        <p class="card-subtitle text-muted fs-6" th:text="'Roles: ' + ${el.roles}"></p>
 
         <a th:href="'delete/' + ${el.id}" class="btn btn-danger">Delete</a>
         <a th:href="'edit/' + ${el.id}" class="btn btn-warning">Edit</a>
