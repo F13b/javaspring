@@ -11,14 +11,20 @@
 
 <header th:insert="fragments/header.html"></header>
 <div class="container my-5">
-  <form action="'/admin'" method="post">
+  <form action="/admin" method="post">
     <div th:each="el:${one_user}">
-      <p th:text="${el.login}"></p>
+      <input type="hidden" th:value="${el.id}" name="userId">
+      <input type="text" th:value="${el.username}" name="username">
     </div>
-    <div th:each="el:${role}">
-      <div th:each="el:${one_user}">
-        <input th:id="${role}" type="checkbox" th:name="${'roles[]'}" th:value="${el}" th:checked="${#lists.contains(user.roles, role)}">
-        <label th:text="${role}"> </label>
+    <div th:each="role:${roles}">
+      <div th:each="user:${one_user}">
+
+        <input th:id="${role}"
+               type="checkbox"
+               th:name="${'roles[]'}"
+               th:value="${role}"
+               th:checked="${#lists.contains(user.roles, role)}">
+        <label th:text="${role}"/>
       </div>
     </div>
     <input type="submit" value="Изменить роль">
