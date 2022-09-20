@@ -1,126 +1,52 @@
 package ru.spring.javaspring.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import ru.spring.javaspring.model.*;
-import ru.spring.javaspring.repo.BirthRepository;
-import ru.spring.javaspring.repo.PhoneRepository;
-import ru.spring.javaspring.repo.TownRepository;
-import ru.spring.javaspring.repo.UserRepository;
-
-import javax.validation.Valid;
-import java.util.*;
+import ru.spring.javaspring.model.Member;
+import ru.spring.javaspring.repo.MemberRepository;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
-
     @Autowired
-    UserRepository userRepository;
-    @Autowired
-    BirthRepository birthRepository;
-    @Autowired
-    TownRepository townRepository;
-    @Autowired
-    PhoneRepository phoneRepository;
-
-//    Get mappings
+    MemberRepository memberRepository;
     @GetMapping("/")
-    public String main(Model model) {
-        return "redirect:/users/all";
+    public String user_data(Model model) {
+        return "/users/home_page";
     }
-
-    @GetMapping("/all")
-    public String all(Model model) {
-        Iterable<User> users = userRepository.findAll();
-        model.addAttribute("users", users);
-        model.addAttribute("pageTitle", "All users");
-        return "users/all_users";
+    @GetMapping("/edit")
+    public String edit_user_view(Model model) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        Member member = memberRepository.findByUsername(username);
+        model.addAttribute("user", member);
+        return "/users/edit_user";
     }
-
-    @GetMapping("/{id}")
-    public String read (@PathVariable("id") Long id, Model model) {
-        Optional<User> user = userRepository.findById(id);
-        ArrayList<User> arrayList = new ArrayList<>();
-        user.ifPresent(arrayList::add);
-        model.addAttribute("users", arrayList);
-        model.addAttribute("pageTitle", "23");
-        return "users/separate_user";
-    }
-
-    @GetMapping("/delete/{id}")
-    public String delete (@PathVariable("id") Long id, Model model) {
-         userRepository.deleteById(id);
-        return "redirect:/users/all";
-    }
-
-    @GetMapping("/edit/{id}")
-    public String edit (@PathVariable("id") Long id,
-                        Model model) {
-        if (!userRepository.existsById(id)) {
-            return "redirect:/all/";
-        }
-        Optional<User> user = userRepository.findById(id);
-        ArrayList<User> arrayList = new ArrayList<>();
-        user.ifPresent(arrayList::add);
-        Iterable<Town> towns = townRepository.findAll();
-        Iterable<Phone> phones = phoneRepository.findAll();
-        Iterable<Birth> brt = birthRepository.findAll();
-        model.addAttribute("birth", brt);
-        model.addAttribute("phone", phones);
-        model.addAttribute("towns", towns);
-        model.addAttribute("usersE", arrayList);
-        model.addAttribute("user", new User());
-
-        return "users/edit_user";
-    }
-
     @PostMapping("/edit/{id}")
-    public String edit(@ModelAttribute("users") @Valid User newuser,
-                       BindingResult bindingResult,
-                       @PathVariable("id") Long id,
-                       @RequestParam(value = "town", required = false) String userTown,
-                       @RequestParam(value = "phone", required = false) Long phones,
-                       @RequestParam(value = "birth", required = false) String birth,
-                       Model model) {
-
-        if (bindingResult.hasErrors()) {
-            Optional<User> user = userRepository.findById(id);
-            ArrayList<User> arrayList = new ArrayList<>();
-            user.ifPresent(arrayList::add);
-            model.addAttribute("usersE", arrayList);
-            return "users/edit_user";
+    public String edit_user(@PathVariable("id") Long id,
+                            @RequestParam("username") String username,
+                            @RequestParam("surname") String surname,
+                            @RequestParam("name") String name,
+                            @RequestParam("secondname") String secondname,
+                            @RequestParam("birth") String birth,
+                            @RequestParam("passport") String passport,
+                            @RequestParam("password") String password,
+                            Model model) {
+        Member member = memberRepository.findById(id).orElseThrow();
+        member.setUsername(username);
+        member.setSurname(surname);
+        member.setName(name);
+        member.setSecondname(secondname);
+        member.setBirth(birth);
+        member.setPassport(passport);
+        if (password != null && !password.equals("")) {
+            member.setPassword(password);
         }
-
-        User user = userRepository.findById(id).orElseThrow();
-        Birth date_of_birth = birthRepository.findByBirth(birth);
-        Town town = townRepository.findByTown(userTown);
-        Phone phone = phoneRepository.findById(phones).orElseThrow();
-
-        user.setName(newuser.getName());
-        user.setUsername(newuser.getUsername());
-        user.setAge(newuser.getAge());
-        user.setGender(newuser.getGender());
-        user.setEmail(newuser.getEmail());
-        user.setDate_of_birth(date_of_birth);
-        user.setPhone(phone);
-        town.getUsers().add(user);
-        user.getTowns().add(town);
-
-        userRepository.save(user);
-        townRepository.save(town);
-        return "redirect:/users/all";
-    }
-
-//    Search post mappings
-    @GetMapping("/search")
-    public String search(@RequestParam("name") String name,
-                         Model model) {
-        List<User> usersList = userRepository.findByUsernameContains(name);
-        model.addAttribute("users", usersList);
-        return "users/all_users";
+        memberRepository.save(member);
+        return "redirect:/";
     }
 }

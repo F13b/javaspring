@@ -16,16 +16,14 @@
   You have been logged out.
 </div>
 <div class="container my-5">
-    <form th:object="${user}" th:action="@{/login}" method="post">
+    <form th:action="@{/login}" method="post">
         <div class="mb-3">
             <label for="username">Enter username</label>
-            <input class="form-control" type="text" id="username" name="username" placeholder="sevas_top" required>
-            <div th:if="${#fields.hasErrors('username')}" th:errors="*{username}">Error</div>
+            <input class="form-control" type="text" id="username" name="username" placeholder="suboba" required>
         </div>
         <div class="mb-3">
             <label for="password">Enter password</label>
-            <input class="form-control" type="password" id="password" name="password" placeholder="cucumber" required>
-            <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}">Error</div>
+            <input class="form-control" type="password" id="password" name="password" required>
         </div>
         <div class="mb-3">
             <button class="btn btn-outline-success" type="submit">Sign in!</button>

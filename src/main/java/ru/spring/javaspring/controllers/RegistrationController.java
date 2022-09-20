@@ -1,65 +1,67 @@
 package ru.spring.javaspring.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import ru.spring.javaspring.model.Abonement;
+import ru.spring.javaspring.model.Member;
 import ru.spring.javaspring.model.Role;
-import ru.spring.javaspring.model.Town;
-import ru.spring.javaspring.model.User;
-import ru.spring.javaspring.model.Vegetables;
-import ru.spring.javaspring.repo.TownRepository;
-import ru.spring.javaspring.repo.UserRepository;
+import ru.spring.javaspring.repo.AbonementRepository;
+import ru.spring.javaspring.repo.MemberRepository;
 
-import javax.validation.Valid;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Collections;
+import java.util.Date;
 
 @Controller
 public class RegistrationController {
     @Autowired
-    private UserRepository userRepository;
+    private MemberRepository memberRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private AbonementRepository abonementRepository;
 
     @GetMapping("/registration")
     public String reg_view(Model model) {
-        model.addAttribute("user", new User());
         return "registration";
     }
 
     @GetMapping("/login")
     public String log_view(Model model) {
-        model.addAttribute("user", new User());
         return "login";
     }
 
     @PostMapping("/registration")
-    public String reg_action(@Valid User user,
-                             BindingResult bindingResult,
+    public String reg_action(Member member,
                              Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "/registration";
-        }
-
-        User userFromDB = userRepository.findByUsername(user.getUsername());
-        if (userFromDB != null)
-        {
+        Member memberFromDB = memberRepository.findByUsername(member.getUsername());
+        if (memberFromDB != null) {
             model.addAttribute(
                     "error",
                     "Такой пользователь уже существует");
             return "/registration";
         }
 
-        user.setActive(true);
-        user.setRoles(Collections.singleton(Role.USER));
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
-//        townRepository.save(town);
+        LocalDate date = LocalDate.now();
+        int abonementNumber = (int)(1000000 + Math.random() * 9000000);
+
+        Abonement userAbonement = new Abonement(Integer.toString(abonementNumber), date.toString(), date.plusYears(1).toString());
+        abonementRepository.save(userAbonement);
+
+        member.setAbonement(userAbonement);
+        member.setActive(true);
+        member.setRoles(Collections.singleton(Role.USER));
+        member.setPassword(passwordEncoder.encode(member.getPassword()));
+        memberRepository.save(member);
         return "redirect:/login";
     }
 }

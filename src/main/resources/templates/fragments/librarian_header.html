@@ -1,0 +1,45 @@
+<nav class="navbar navbar-expand-lg bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="/librarian/">Librarian panel</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Books
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/librarian/books/all-books/">All books</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Sheets
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/librarian/sheets/all-sheets">All sheets</a></li>
+            <li><a class="dropdown-item" href="/librarian/sheets/add-sheet">Add sheet</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            Other
+          </a>
+          <ul class="dropdown-menu">
+            <li><a class="dropdown-item" href="/librarian/authors/all-authors">Authors</a></li>
+            <li><a class="dropdown-item" href="/librarian/branches/all-branches">Branches</a></li>
+            <li><a class="dropdown-item" href="/librarian/publishers/all-publishers">Publisher houses</a></li>
+            <li><a class="dropdown-item" href="/librarian/genres/all-genres">Genres</a></li>
+            <li><a class="dropdown-item" href="/librarian/editions/all-editions">Editions</a></li>
+            <li><a class="dropdown-item" href="/librarian/limits/all-limits">Age limits</a></li>
+          </ul>
+        </li>
+      </ul>
+      <form class="d-flex" th:action="@{/logout}">
+        <button class="btn btn-outline-danger" type="submit">Log out</button>
+      </form>
+    </div>
+  </div>
+</nav>
