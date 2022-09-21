@@ -17,6 +17,12 @@
     </a>
 
     <div class="row mt-5" >
+        <form action="/admin/posts/search" method="get">
+            <div class="mb-3">
+                <label for="postName">Enter a post name to search</label>
+                <input type="text" name="name" id="postName">
+            </div>
+        </form>
         <div class="col-12 col-lg-3" th:each="el : ${posts}">
             <div class="card">
                 <div class="card-body">

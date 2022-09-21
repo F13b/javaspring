@@ -14,13 +14,13 @@ public class Limit {
 
     @NotEmpty
     @Min(message = "Возрастное ограничение не может быть меньше 0!", value = 0)
-    private String age_limit;
+    private String ageLimit;
 
     @OneToMany(mappedBy = "book_age_limit", fetch = FetchType.EAGER)
     private Collection<Book> books;
 
     public Limit(String age_limit, Collection<Book> books) {
-        this.age_limit = age_limit;
+        this.ageLimit = age_limit;
         this.books = books;
     }
 
@@ -36,11 +36,11 @@ public class Limit {
     }
 
     public String getAge_limit() {
-        return age_limit;
+        return ageLimit;
     }
 
     public void setAge_limit(String age_limit) {
-        this.age_limit = age_limit;
+        this.ageLimit = age_limit;
     }
 
     public Collection<Book> getBooks() {

@@ -6,5 +6,5 @@ import ru.spring.javaspring.model.Post;
 import java.util.List;
 
 public interface PostRepository extends CrudRepository<Post, Long> {
-    List<Post> findByName(String name);
+    List<Post> findByNameContains(String name);
 }

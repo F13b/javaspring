@@ -29,7 +29,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    public Member(String username, String password, String surname, String name, String secondname, String birth, String passport, boolean active, Abonement abonement, Set<Role> roles) {
+    @OneToOne(optional = true, mappedBy = "member")
+    private Sheet sheet;
+
+    public Member(String username, String password, String surname, String name, String secondname, String birth, String passport, boolean active, Abonement abonement, Set<Role> roles, Sheet sheet) {
         this.username = username;
         this.password = password;
         this.surname = surname;
@@ -40,6 +43,7 @@ public class Member {
         this.active = active;
         this.abonement = abonement;
         this.roles = roles;
+        this.sheet = sheet;
     }
 
     public Member() {
@@ -131,5 +135,13 @@ public class Member {
 
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
+    }
+
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(Sheet sheet) {
+        this.sheet = sheet;
     }
 }

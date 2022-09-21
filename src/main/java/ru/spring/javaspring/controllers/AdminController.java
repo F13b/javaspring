@@ -1,29 +1,32 @@
 package ru.spring.javaspring.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.spring.javaspring.model.Employee;
-import ru.spring.javaspring.model.Post;
-import ru.spring.javaspring.model.Publisher;
+import ru.spring.javaspring.model.*;
 import ru.spring.javaspring.repo.EmployeeRepository;
+import ru.spring.javaspring.repo.MemberRepository;
 import ru.spring.javaspring.repo.PostRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/admin")
 @EnableGlobalMethodSecurity(prePostEnabled = true)
-//@PreAuthorize("hasAnyAuthority('ADMIN')")
+@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class AdminController {
 
     @Autowired
     EmployeeRepository employeeRepository;
     @Autowired
     PostRepository postRepository;
+    @Autowired
+    MemberRepository memberRepository;
 
     @GetMapping("/")
     public String home_page() {
@@ -32,7 +35,9 @@ public class AdminController {
 
 //    posts
     @GetMapping("/posts/all-posts")
-    public String all_posts() {
+    public String all_posts(Model model) {
+        Iterable<Post> posts = postRepository.findAll();
+        model.addAttribute("posts", posts);
         return "/admin/post/all_posts";
     }
     @GetMapping("/posts/add-post")
@@ -71,10 +76,19 @@ public class AdminController {
         postRepository.deleteById(id);
         return "redirect:/admin/posts/all-posts/";
     }
+    @GetMapping("/posts/search")
+    public String search(@RequestParam("name") String name,
+                         Model model) {
+        List<Post> postList = postRepository.findByNameContains(name);
+        model.addAttribute("posts", postList);
+        return "admin/post/all_posts";
+    }
 
 //    employees
     @GetMapping("/employees/all-employees")
-    public String all_employees() {
+    public String all_employees(Model model) {
+        Iterable<Employee> employes = employeeRepository.findAll();
+        model.addAttribute("employees", employes);
         return "/admin/employee/all_employees";
     }
     @GetMapping("/employees/add-employee")
@@ -118,5 +132,46 @@ public class AdminController {
     public String delete_employee(@PathVariable("id") Long id) {
         employeeRepository.deleteById(id);
         return "redirect:/admin/employees/all-employees/";
+    }
+
+//    users
+    @GetMapping("/users/all-users")
+    public String all_users(Model model) {
+        Iterable<Member> members = memberRepository.findAll();
+        model.addAttribute("users", members);
+        return "admin/employee/all_users";
+    }
+    @GetMapping("/users/edit/{id}")
+    public String edit_user(@PathVariable("id") Long id, Model model) {
+        Optional<Member> user_raw = memberRepository.findById(id);
+        ArrayList<Member> userArrayList = new ArrayList<>();
+
+        user_raw.ifPresent(userArrayList::add);
+
+        model.addAttribute("one_user", userArrayList);
+        model.addAttribute("roles", Role.values());
+        return "admin/employee/edit_roles";
+    }
+
+    @PostMapping("/users/edit/{id}")
+    public String edit_role(
+            @RequestParam("userId") Member user,
+            @RequestParam("username") String username,
+            @RequestParam(name = "roles[]", required = false)
+            String[] roles
+    )
+    {
+        user.setUsername(username);
+        user.getRoles().clear();
+
+        if (roles != null)
+        {
+            for (String role_name:
+                    roles) {
+                user.getRoles().add(Role.valueOf(role_name));
+            }
+        }
+        memberRepository.save(user);
+        return "redirect:/admin/users/all-users";
     }
 }

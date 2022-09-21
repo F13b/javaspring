@@ -12,24 +12,39 @@
 <header th:insert="fragments/librarian_header.html"></header>
 <div class="container my-5">
 
-    <a href="/librarian/authors/add-author/" class="btn btn-outline-primary">
-        Add new author
+    <a href="/librarian/sheets/all-sheets/" class="btn btn-outline-danger">
+        Back
     </a>
 
-    <div class="row mt-5" >
-        <div class="col-12 col-lg-3" th:each="el : ${authors}">
-            <div class="card">
-                <div class="card-body">
-                    <span class="fs-5" th:text="${el.surname} + ' ' + ${el.name} + ' ' + ${el.secondname}"></span>
-                    <div class="mt-3 d-flex">
-                        <a class="btn btn-outline-primary me-2" th:href="'/librarian/authors/edit/'+${el.id}">Edit</a>
-                        <form th:action="'/librarian/authors/delete/'+${el.id}" method="post">
-                            <button type="submit" class="btn btn-outline-danger">Delete</button>
-                        </form>
-                    </div>
-                </div>
+    <div class="row" >
+        <form action="/librarian/sheets/add-sheet" method="post">
+            <div class="mb-3">
+                <label for="date_of_issue">Enter issue date</label>
+                <input type="date" required id="date_of_issue" name="date_of_issue">
             </div>
-        </div>
+            <div class="mb-3">
+                <label for="book">Enter book</label>
+                <select name="book" id="book">
+                    <option th:each="book : ${books}" th:text="${book.name}" th:value="${book.id}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="employee">Enter employee</label>
+                <select name="employee" id="employee">
+                    <option th:each="employee : ${employees}" th:text="${employee.surname}" th:value="${employee.id}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="member">Enter member</label>
+                <select name="member" id="member">
+                    <option th:each="member : ${members}" th:text="${member.abonement.number}" th:value="${member.id}"></option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <a href="/librarian/sheets/all-sheets">Cancel</a>
+                <button type="submit">Create</button>
+            </div>
+        </form>
     </div>
 
 </div>

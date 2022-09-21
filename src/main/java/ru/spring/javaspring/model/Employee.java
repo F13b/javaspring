@@ -25,14 +25,18 @@ public class Employee {
     @JoinColumn(name = "post_id")
     private Post post;
 
+    @OneToOne(optional = true, mappedBy = "employee")
+    private Sheet sheet;
 
-    public Employee(String surname, String name, String secondname, boolean active, Set<Role> roles, Post post) {
+
+    public Employee(String surname, String name, String secondname, boolean active, Set<Role> roles, Post post, Sheet sheet) {
         this.surname = surname;
         this.name = name;
         this.secondname = secondname;
         this.active = active;
         this.roles = roles;
         this.post = post;
+        this.sheet = sheet;
     }
 
     public Employee() {
@@ -92,5 +96,13 @@ public class Employee {
 
     public void setPost(Post post) {
         this.post = post;
+    }
+
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(Sheet sheet) {
+        this.sheet = sheet;
     }
 }

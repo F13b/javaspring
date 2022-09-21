@@ -10,9 +10,9 @@
 <body>
 
 <header th:insert="fragments/header.html"></header>
-<div class="container my-5">
-    <form action="/admin" method="post">
-        <div th:each="el:${one_user}">
+<div class="container my-5" th:each="el:${one_user}">
+    <form th:action="'/admin/users/edit/'+${el.id}" method="post">
+        <div>
             <input type="hidden" th:value="${el.id}" name="userId">
             <input type="text" th:value="${el.username}" name="username">
         </div>

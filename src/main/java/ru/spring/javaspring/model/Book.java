@@ -43,7 +43,11 @@ public class Book {
     @ManyToOne(optional = true, cascade = CascadeType.ALL)
     private Limit book_age_limit;
 
-    public Book(String name, Integer pages, Double price, String year, Integer amount, List<Author> authors, List<Branch> branches, Edition edition, Publisher publisher, List<Genre> genres, Limit book_age_limit) {
+    @OneToOne(optional = true, mappedBy = "book")
+    private Sheet sheet;
+
+
+    public Book(String name, Integer pages, Double price, String year, Integer amount, List<Author> authors, List<Branch> branches, Edition edition, Publisher publisher, List<Genre> genres, Limit book_age_limit, Sheet sheet) {
         this.name = name;
         this.pages = pages;
         this.price = price;
@@ -55,6 +59,7 @@ public class Book {
         this.publisher = publisher;
         this.genres = genres;
         this.book_age_limit = book_age_limit;
+        this.sheet = sheet;
     }
 
     public Book() {
@@ -154,5 +159,13 @@ public class Book {
 
     public void setBook_age_limit(Limit book_age_limit) {
         this.book_age_limit = book_age_limit;
+    }
+
+    public Sheet getSheet() {
+        return sheet;
+    }
+
+    public void setSheet(Sheet sheet) {
+        this.sheet = sheet;
     }
 }

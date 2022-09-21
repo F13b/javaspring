@@ -1,6 +1,7 @@
 package ru.spring.javaspring.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -14,6 +15,7 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/librarian")
+@PreAuthorize("hasAnyAuthority('LIBRARIAN')")
 public class LibrarianController {
 
     @Autowired
@@ -32,6 +34,10 @@ public class LibrarianController {
     SheetRepository sheetRepository;
     @Autowired
     LimitRepository limitRepository;
+    @Autowired
+    MemberRepository memberRepository;
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     @GetMapping("/")
     public String home_page() {
@@ -377,7 +383,7 @@ public class LibrarianController {
         return "librarian/books/edit_book";
     }
 
-    @PostMapping("/books/add-books")
+    @PostMapping("/books/add-book")
     public String add_book(Book book, Model model) {
         bookRepository.save(book);
         return "redirect:/librarian/books/all-books";
@@ -417,9 +423,15 @@ public class LibrarianController {
         return "librarian/sheets/all_sheets";
     }
 
-    @GetMapping("/sheets/add-sheets")
-    public String add_sheets_view() {
-        return "librarian/sheets/add_sheets";
+    @GetMapping("/sheets/add-sheet")
+    public String add_sheets_view(Model model) {
+        Iterable<Book> books = bookRepository.findAll();
+        Iterable<Member> members = memberRepository.findAll();
+        Iterable<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("books", books);
+        model.addAttribute("employees", employees);
+        model.addAttribute("members", members);
+         return "librarian/sheets/add_sheet";
     }
 
     @GetMapping("/sheets/edit/{id}")
@@ -431,10 +443,16 @@ public class LibrarianController {
         ArrayList<Sheet> arrayList = new ArrayList<>();
         sheet.ifPresent(arrayList::add);
         model.addAttribute("sheet", arrayList);
+        Iterable<Book> books = bookRepository.findAll();
+        Iterable<Member> members = memberRepository.findAll();
+        Iterable<Employee> employees = employeeRepository.findAll();
+        model.addAttribute("books", books);
+        model.addAttribute("employees", employees);
+        model.addAttribute("members", members);
         return "librarian/sheets/edit_sheet";
     }
 
-    @PostMapping("/sheets/add-sheets")
+    @PostMapping("/sheets/add-sheet")
     public String add_sheet(Sheet sheet, Model model) {
         sheetRepository.save(sheet);
         return "redirect:/librarian/sheets/all-sheets";
@@ -443,10 +461,18 @@ public class LibrarianController {
     @PostMapping("/sheets/edit/{id}")
     public String edit_sheet(@PathVariable("id") Long id,
                               @RequestParam("date_of_issue") String date_of_issue,
+                              @RequestParam("return_date") String return_date,
+                              @RequestParam("book") Book book,
+                              @RequestParam("employee") Employee employee,
+                              @RequestParam("member") Member member,
                               Model model) {
 
         Sheet sheet = sheetRepository.findById(id).orElseThrow();
         sheet.setDate_of_issue(date_of_issue);
+        sheet.setReturn_date(return_date);
+        sheet.setBook(book);
+        sheet.setEmployee(employee);
+        sheet.setMember(member);
         sheetRepository.save(sheet);
         return "redirect:/librarian/sheets/all-sheets";
     }
